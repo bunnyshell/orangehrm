@@ -24,20 +24,14 @@ exec_once:
    command: |
      rm -f /etc/apache2/sites-enabled/000-default.conf
 
-pre_app_deploy:
- execs:
-  Run Composer Install:
-   name: Run Composer install
-   command: |
-     #!/usr/bin/env bash
-     export COMPOSER_HOME=/usr/local/bin/.composer
-     /usr/local/bin/composer install -d symfony/lib
-
 post_app_deploy:
  execs:
   Restart apache:
    name: Restart apache
    command: |
      #!/usr/bin/env bash
+     export COMPOSER_HOME=/usr/local/bin/.composer
+     /usr/local/bin/composer install -d symfony/lib
+
      chown -RL www-data:www-data /var/www/html/orangehrm
      service apache2 restart
