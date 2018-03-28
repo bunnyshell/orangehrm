@@ -1,0 +1,33 @@
+exec_once:
+ files:
+  /etc/apache2/sites-enabled/orangehrm.conf:
+    name: orangehrm.conf
+    path: /etc/apache2/sites-enabled/
+    mode: "0644"
+    owner: root
+    group: root
+    content: |
+      <VirtualHost *:80>
+        DocumentRoot /var/www/html/orangehrm
+        <Directory /var/www/html/orangehrm>
+          AllowOverride All
+          Order Allow,Deny
+          Allow from All
+        </Directory>
+
+        CustomLog /var/log/apache2/access.log combined
+        ErrorLog /var/log/apache2/error.log
+      </VirtualHost>
+ execs:
+  Remove default apache config file:
+   name: Remove default apache config file
+   command: |
+     rm -f /etc/apache2/sites-enabled/000-default.conf
+post_app_deploy:
+ execs:
+  Restart apache:
+   name: Restart apache
+   command: |
+     #!/usr/bin/env bash
+     chown -RL www-data:www-data /var/www/html/orangehrm
+     service apache2 restart
