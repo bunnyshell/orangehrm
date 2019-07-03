@@ -8,8 +8,8 @@ exec_once:
     group: root
     content: |
       <VirtualHost *:80>
-        DocumentRoot /var/www/html/orangehrm
-        <Directory /var/www/html/orangehrm>
+        DocumentRoot <%= @app_root %>
+        <Directory <%= @app_root %>>
           AllowOverride All
           Order Allow,Deny
           Allow from All
@@ -33,5 +33,5 @@ post_app_deploy:
      export COMPOSER_HOME=/usr/local/bin/.composer
      /usr/local/bin/composer install -d symfony/lib
 
-     chown -RL www-data:www-data /var/www/html/orangehrm
+     chown -RL www-data:www-data <%= @app_root %>
      service apache2 restart
